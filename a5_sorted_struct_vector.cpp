@@ -41,7 +41,7 @@ namespace f {
 // data structures
 //------------------------------------------------------------------------------
 struct Pitcher {
-
+    
     string name;
     int wins;
 };
@@ -87,12 +87,12 @@ int main() {
 
         // set up vector element with initialization list
 
-        Pitcher p {
+        Pitcher p { 
         // text before comma goes in struct name field
             pitcher_line.substr(0, comma_index),
         // text after comma goes in struct wins field as int
-            stoi(pitcher_line.substr(comma_index + 1))
-       // stoi() is string to int library function
+             stoi(pitcher_line.substr(comma_index + 1))
+        // stoi() is string to int library function
         };
 
         // display file data with struct data for debug
