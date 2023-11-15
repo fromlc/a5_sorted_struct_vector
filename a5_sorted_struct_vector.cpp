@@ -1,24 +1,15 @@
 //------------------------------------------------------------------------------
-// a6_sorted_struct_vector.cpp
+// a5_sorted_struct_vector.cpp
 // 
-// -reads data from file mlb_pitchers.csv into a vector of structs
-// -each data line contains a MLB pitcher's
-//       name,
-//       number of wins,
-//       number of losses, and
-//       career ERA
-// 
-//      ERA is how many runs a pitcher allows per nine innings.
-//      A lower ERA is better.
-// 
-// -sorts the vector elements with sort()
-// -display all elements of the sorted vector.
+// -reads data from file mlb_pitchers.csv into a vector of Pitcher structs
+// -each data line contains a MLB pitcher's name and number of career wins
+// -sorts the vector elements with sort() using comparison function
+// -displays all elements of the sorted vector
 //------------------------------------------------------------------------------
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -41,13 +32,13 @@ namespace f {
 // data structures
 //------------------------------------------------------------------------------
 struct Pitcher {
-
+    
     string name;
     int wins;
 };
 
 //------------------------------------------------------------------------------
-// sort() comparison function
+// sort() custom comparison function
 //------------------------------------------------------------------------------
 bool compare_pitchers(Pitcher& p1, Pitcher& p2) {
 
@@ -87,12 +78,12 @@ int main() {
 
         // set up vector element with initialization list
 
-        Pitcher p {
+        Pitcher p { 
         // text before comma goes in struct name field
             pitcher_line.substr(0, comma_index),
         // text after comma goes in struct wins field as int
-            stoi(pitcher_line.substr(comma_index + 1))
-       // stoi() is string to int library function
+             stoi(pitcher_line.substr(comma_index + 1))
+        // stoi() is string to int library function
         };
 
         // display file data with struct data for debug
