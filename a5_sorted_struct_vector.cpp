@@ -101,6 +101,7 @@ int main() {
 #endif
         cout << p.name << ' ' << p.wins << "\n\n";
 
+        // append a copy of p to vector
         vps.push_back(p);
     }
 
