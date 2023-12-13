@@ -17,7 +17,7 @@ using namespace std;
 //------------------------------------------------------------------------------
 // debug mode toggle
 //------------------------------------------------------------------------------
-#define _LCDEBUG
+//#define _LCDEBUG
 
 //------------------------------------------------------------------------------
 // input file
@@ -32,7 +32,7 @@ namespace f {
 // data structures
 //------------------------------------------------------------------------------
 struct Pitcher {
-    
+
     string name;
     int wins;
 };
@@ -49,6 +49,9 @@ bool compare_pitchers(Pitcher& p1, Pitcher& p2) {
 // local functions
 //------------------------------------------------------------------------------
 void open_datafile(ifstream&);
+void read_pitcher_data(ifstream&, vector<Pitcher>&);
+// inline function does not generate an actual call so no reference needed
+inline void display_pitcher_vector(vector<Pitcher>&);
 
 //------------------------------------------------------------------------------
 // entry point
@@ -59,56 +62,18 @@ int main() {
     open_datafile(myfile);
 
     vector<Pitcher> vps { };
+    read_pitcher_data(myfile, vps);
 
-    cout << '\n' << "Vector before sort\n\n";
-
-    // read file data into vector
-    while (true) {
-
-        string pitcher_line;
-        getline(myfile, pitcher_line);
-
-        // check for file read error or end of file
-        if (!myfile.good()) {
-            break;
-        }
-
-        // get index of first comma in file data line
-        size_t comma_index = pitcher_line.find(',');
-
-        // set up vector element with initialization list
-
-        Pitcher p { 
-        // text before comma goes in struct name field
-            pitcher_line.substr(0, comma_index),
-        // text after comma goes in struct wins field as int
-             stoi(pitcher_line.substr(comma_index + 1))
-        // stoi() is string to int library function
-        };
-
-        // display file data with struct data for debug
-#ifdef _LCDEBUG
-        cout << pitcher_line << '\n';
-#endif
-        cout << p.name << ' ' << p.wins << "\n\n";
-
-        // append a copy of p to vector
-        vps.push_back(p);
-    }
-
-    // close your data file right after you're done with it
     myfile.close();
 
+    cout << "\nVector before sort\n\n";
+    display_pitcher_vector(vps);
+
     // sort the vector of Pitchers using custom comparison function
-    std::sort(vps.begin(), vps.end(), compare_pitchers);
+    sort(vps.begin(), vps.end(), compare_pitchers);
 
-    cout << "Sorted vector\n\n";
-
-    // use reference to prevent element copy
-    for (Pitcher& p_element : vps) {
-
-        cout << p_element.name << ' ' << p_element.wins << '\n';
-    }
+    cout << "\nSorted vector\n\n";
+    display_pitcher_vector(vps);
 
     return 0;
 }
@@ -125,6 +90,49 @@ void open_datafile(ifstream& fdata) {
 
         cout << "Unable to open file";
         exit(f::INPUT_FILE_OPEN_ERROR);
+    }
+}
+
+//------------------------------------------------------------------------------
+// read file data into passed vector
+//------------------------------------------------------------------------------
+void read_pitcher_data(ifstream& inf, vector<Pitcher>& vp) {
+
+    string pitcher_line;
+    while (getline(inf, pitcher_line)) {
+
+        // get index of first comma in file data line
+        size_t comma_index = pitcher_line.find(',');
+
+        // set up vector element with initialization list
+
+        Pitcher p {
+        // text before comma goes in struct name field as string
+            pitcher_line.substr(0, comma_index),
+        // text after comma goes in struct wins field as int
+            stoi(pitcher_line.substr(comma_index + 1))
+        };
+
+#ifdef _LCDEBUG
+        // display file data with struct data for debug
+        cout << pitcher_line << '\n';
+        cout << p.name << ' ' << p.wins << "\n\n";
+#endif
+
+        // append a copy of p to vector
+        vp.push_back(p);
+    }
+
+}
+
+//------------------------------------------------------------------------------
+// display vector elements
+//------------------------------------------------------------------------------
+inline void display_pitcher_vector(vector<Pitcher>& vp) {
+
+    for (Pitcher& p_element : vp) {
+
+        cout << p_element.name << ' ' << p_element.wins << '\n';
     }
 }
 
